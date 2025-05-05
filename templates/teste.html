@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste</title>
+</head>
+<body>
+    <form action="/resultado" method="post">
+        <input type="hidden" name="total" value="{{ total }}">
+        {% for p in perguntas %}
+            {% set pergunta_idx = loop.index0 %}
+            <fieldset>
+                <legend><strong>{{ loop.index }}. {{ p.pergunta }}</strong></legend>
+                {% for op in p.opcoes %}
+                    {% set option_id = 'q' ~ pergunta_idx ~ '_' ~ loop.index0 %}
+                    <label for="{{ option_id }}">
+                        <input type="radio"
+                               id="{{ option_id }}"
+                               name="resposta_{{ pergunta_idx }}"
+                               value="{{ op[0] }}"
+                               required>
+                        {{ op }}
+                    </label><br>
+                {% endfor %}
+                <input type="hidden" name="resposta_certa_{{ pergunta_idx }}" value="{{ p.resposta_certa }}">
+            </fieldset>
+            <hr>
+        {% endfor %}
+        <input type="submit" value="Submeter Teste">
+    </form>
+</body>
+</html>

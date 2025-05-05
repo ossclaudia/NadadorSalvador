@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gerar Teste</title>
+</head>
+<body>
+    <h1>Gerador de Testes</h1>
+
+    <form action="/teste" method="post">
+        <label for="capitulo">Escolhe um capítulo:</label>
+        <select name="capitulo" id="capitulo">
+            {% for cap in capitulos %}
+                <option value="{{ cap }}">{{ cap }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label for="num_perguntas">Número de perguntas:</label>
+        <input type="number" id="num_perguntas" name="total" required>
+        <br>
+        <p id="max_info" style="font-style: italic; color: gray;"></p>
+
+        <button type="submit">Gerar Teste</button>
+    </form>
+
+    <script>
+        // Dicionário com máximos por capítulo vindo do Flask
+        const maxPorCapitulo = {{ max_por_capitulo | tojson }};
+        
+        const selectCapitulo = document.getElementById("capitulo");
+        const inputNum = document.getElementById("num_perguntas");
+        const infoMax = document.getElementById("max_info");
+
+        function atualizarMaximo() {
+            const capSelecionado = selectCapitulo.value;
+            const max = maxPorCapitulo[capSelecionado];
+            inputNum.max = max;
+            infoMax.textContent = "Este capítulo tem no máximo " + max + " perguntas.";
+        }
+
+        // Atualiza ao mudar de capítulo e ao carregar a página
+        selectCapitulo.addEventListener("change", atualizarMaximo);
+        window.addEventListener("DOMContentLoaded", atualizarMaximo);
+    </script>
+</body>
+</html>
